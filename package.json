@@ -1,0 +1,31 @@
+{
+  "name": "BottleEarth",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@turf/bbox": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
+    "@turf/points-within-polygon": "^6.5.0",
+    "@turf/random": "^6.5.0",
+    "@turf/tin": "^6.5.0",
+    "cesium": "^1.95.0",
+    "core-js": "^3.8.3",
+    "element-plus": "^2.2.10",
+    "vue": "^3.2.13"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "copy-webpack-plugin": "^11.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
