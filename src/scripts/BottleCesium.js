@@ -4,8 +4,11 @@ import {B_Camera} from "@/scripts/Camera";
 import {B_Measure} from "@/scripts/Measure";
 import {B_DataSource} from "./DataSource";
 
+
+
 export class B_Cesium {
     constructor(container, optionPlus) {
+
         Cesium.Ion.defaultAccessToken = cesiumDefaultAccessToken
         if (!cesiumDefaultAccessToken) {
             console.log("Cesium令牌缺失！")
@@ -199,82 +202,86 @@ export class B_Cesium {
 
 
         const tianImage = new Cesium.ProviderViewModel({
-              name: '天地图影像',
-              tooltip: '天地图影像地图源',
-              iconUrl: require("@/assets/cesium/tianimg.png"),
-              category: '国内地图',
-              creationFunction: function () {
+            name: '天地图影像',
+            tooltip: '天地图影像地图源',
+            iconUrl: require("@/assets/cesium/tianimg.png"),
+            category: '国内地图',
+            creationFunction: function () {
                 const layer1 = new Cesium.WebMapTileServiceImageryProvider({
-                  url: 'https://t0.tianditu.gov.cn/img_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
-                  layer: 'img',
-                  style: 'default',
-                  tileMatrixSetID: 'w',
-                  format: 'tiles',
-                  maximumLevel: 18
+                    url: 'https://t0.tianditu.gov.cn/img_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
+                    layer: 'img',
+                    style: 'default',
+                    tileMatrixSetID: 'w',
+                    format: 'tiles',
+                    maximumLevel: 18
                 })
                 const layer2 = new Cesium.WebMapTileServiceImageryProvider({
-                  url: 'https://t0.tianditu.gov.cn/cia_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
-                  layer: 'cia',
-                  style: 'default',
-                  tileMatrixSetID: 'w',
-                  format: 'tiles',
-                  maximumLevel: 18
+                    url: 'https://t0.tianditu.gov.cn/cia_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
+                    layer: 'cia',
+                    style: 'default',
+                    tileMatrixSetID: 'w',
+                    format: 'tiles',
+                    maximumLevel: 18
                 })
                 return [layer1, layer2]
-              }
-            })
+            }
+        })
         const tianVector = new Cesium.ProviderViewModel({
-          name: '天地图矢量',
-          tooltip: '天地图矢量地图源',
-          iconUrl: require("@/assets/cesium/tianvec.png"),
-          category: '国内地图',
-          creationFunction: function () {
-            const layer1 = new Cesium.WebMapTileServiceImageryProvider({
-              url: "https://t0.tianditu.gov.cn/vec_w/wmts?tk=057532f01c1b949cb43202d3aa352993",
-              layer: 'vec',
-              style: 'default',
-              tileMatrixSetID: 'w',
-              format: 'tiles',
-              maximumLevel: 18
-            })
-            const layer2 = new Cesium.WebMapTileServiceImageryProvider({
-              url: 'https://t0.tianditu.gov.cn/cva_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
-              layer: 'cva',
-              style: 'default',
-              tileMatrixSetID: 'w',
-              format: 'tiles',
-              maximumLevel: 18
-            })
-            return [layer1, layer2]
-          }
+            name: '天地图矢量',
+            tooltip: '天地图矢量地图源',
+            iconUrl: require("@/assets/cesium/tianvec.png"),
+            category: '国内地图',
+            creationFunction: function () {
+                const layer1 = new Cesium.WebMapTileServiceImageryProvider({
+                    url: "https://t0.tianditu.gov.cn/vec_w/wmts?tk=057532f01c1b949cb43202d3aa352993",
+                    layer: 'vec',
+                    style: 'default',
+                    tileMatrixSetID: 'w',
+                    format: 'tiles',
+                    maximumLevel: 18
+                })
+                const layer2 = new Cesium.WebMapTileServiceImageryProvider({
+                    url: 'https://t0.tianditu.gov.cn/cva_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
+                    layer: 'cva',
+                    style: 'default',
+                    tileMatrixSetID: 'w',
+                    format: 'tiles',
+                    maximumLevel: 18
+                })
+                return [layer1, layer2]
+            }
         })
         const tianTerrain = new Cesium.ProviderViewModel({
-          name: '天地图地形',
-          tooltip: '天地图影像地图源',
-          iconUrl: require("@/assets/cesium/tianter.png"),
-          category: '国内地图',
-          creationFunction: function () {
-            const layer1 = new Cesium.WebMapTileServiceImageryProvider({
-              url: 'https://t0.tianditu.gov.cn/ter_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
-              layer: 'ter',
-              style: 'default',
-              tileMatrixSetID: 'w',
-              format: 'tiles',
-              maximumLevel: 18
-            })
-            const layer2 = new Cesium.WebMapTileServiceImageryProvider({
-              url: 'https://t0.tianditu.gov.cn/cta_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
-              layer: 'cta',
-              style: 'default',
-              tileMatrixSetID: 'w',
-              format: 'tiles',
-              maximumLevel: 18
-            })
-            return [layer1, layer2]
-          }
+            name: '天地图地形',
+            tooltip: '天地图影像地图源',
+            iconUrl: require("@/assets/cesium/tianter.png"),
+            category: '国内地图',
+            creationFunction: function () {
+                const layer1 = new Cesium.WebMapTileServiceImageryProvider({
+                    url: 'https://t0.tianditu.gov.cn/ter_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
+                    layer: 'ter',
+                    style: 'default',
+                    tileMatrixSetID: 'w',
+                    format: 'tiles',
+                    maximumLevel: 18
+                })
+                const layer2 = new Cesium.WebMapTileServiceImageryProvider({
+                    url: 'https://t0.tianditu.gov.cn/cta_w/wmts?tk=057532f01c1b949cb43202d3aa352993',
+                    layer: 'cta',
+                    style: 'default',
+                    tileMatrixSetID: 'w',
+                    format: 'tiles',
+                    maximumLevel: 18
+                })
+                return [layer1, layer2]
+            }
         })
         this._viewer.baseLayerPicker.viewModel.imageryProviderViewModels.unshift(tianImage, tianVector, tianTerrain)
         this._viewer.baseLayerPicker.viewModel.selectedImagery = this._viewer.baseLayerPicker.viewModel.imageryProviderViewModels[0]
         this._viewer.baseLayerPicker.viewModel.selectedTerrain = this._viewer.baseLayerPicker.viewModel.terrainProviderViewModels[1]
+
+
+
     }
+
 }

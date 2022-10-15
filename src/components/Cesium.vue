@@ -1,5 +1,7 @@
 <template>
+  <!-- Cesium容器 -->
   <div id="cesiumContainer" style="height: 100vh"></div>
+
   <div class="title-bg-container">
     <div class="title-bg-tool">
 
@@ -9,8 +11,10 @@
         </div>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.measurePolyLineTool">欧式距离</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.measurePolyLineToGroundTool">贴地距离</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.measurePolygonToGroundTool">贴地面积</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.measurePolyLineToGroundTool">贴地距离</a>
+          </li>
+          <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.measurePolygonToGroundTool">贴地面积</a>
+          </li>
           <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.measureProfileTool">剖面测量</a></li>
           <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.measurePointTool">点位测量</a></li>
           <li><a class="dropdown-item" href="javascript:void(0)" @click="measure.guideCarTool">路线导航</a></li>
@@ -36,8 +40,10 @@
           <img :src="require('@/assets/cesium/位置.png')">
         </div>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="javascript:void(0)" @click="flyToFromDegree(114.35590,30.529938)">武汉大学区域</a></li>
-          <li><a class="dropdown-item" href="javascript:void(0)" @click="flyToFromDegree(104.537499,31.871504,1000)">黄家坝示范区</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0)"
+                 @click="flyToFromDegree(114.35590,30.529938)">武汉大学区域</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0)" @click="flyToFromDegree(104.537499,31.871504,1000)">黄家坝示范区</a>
+          </li>
         </ul>
       </div>
 
@@ -46,8 +52,17 @@
       </div>
 
       <div class="dropdown">
+        <div class="tool" data-bs-toggle="dropdown" aria-expanded="false">
+          <img :src="require('@/assets/cesium/警告.png')">
+        </div>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="javascript:void(0)" @click="paint.paintWave">沪定地震</a></li>
+        </ul>
+      </div>
+
+      <div class="dropdown">
         <div data-bs-toggle="dropdown" class="d-inline-flex" aria-expanded="false">
-          <input type="text" placeholder="地名检索" v-model="poiForm.keyWord">
+          <input type="text" placeholder="地名检索" v-model="poiForm.keyWord" style="width: 100%">
           <span><div class="tool" style="height: 35px;margin-left: 0;margin-top: 3px;border-radius: 0"
                      @click="measure.suggestPoi()">
           <img :src="require('@/assets/cesium/搜索.png')" style="height: 25px;width: 25px"></div>
@@ -61,18 +76,18 @@
       </div>
 
 
-
     </div>
     <div class="title-bg"></div>
     <div class="title-bg-tool">
     </div>
   </div>
-  <div class="title">BottleEarth</div>
+  <div class="title">应急水源智能决策系统</div>
   <div style="position: absolute;bottom: 0;left: 0;color: white">经度 {{ screenPoint.lon }} 纬度 {{ screenPoint.lat }} 高程
     {{ screenPoint.height }}
   </div>
 
-  <div class="offcanvas offcanvas-bottom" style="height: 70vh" tabindex="-1" id="myOffcanvas" aria-labelledby="offcanvasBottomLabel">
+  <div class="offcanvas offcanvas-bottom" style="height: 70vh" tabindex="-1" id="myOffcanvas"
+       aria-labelledby="offcanvasBottomLabel">
     <div class="offcanvas-header">
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -80,7 +95,8 @@
     </div>
   </div>
 
-  <div class="offcanvas offcanvas-start" style="width: 30vh" tabindex="-1" id="treeOffcanvas" aria-labelledby="offcanvasBottomLabel">
+  <div class="offcanvas offcanvas-start" style="width: 30vh" tabindex="-1" id="treeOffcanvas"
+       aria-labelledby="offcanvasBottomLabel">
     <el-tree :data="layer" @check-change="handleCheckChange" show-checkbox default-expand-all/>
   </div>
 
@@ -92,6 +108,7 @@ import {B_Cesium} from "@/scripts/BottleCesium";
 import * as widgets from "cesium/Widgets/widgets.css";
 import {B_Measure} from "@/scripts/Measure";
 import Utils from "@/scripts/Utils";
+import * as Cesium from "cesium/Cesium";
 
 export default {
   name: "cesium",
@@ -131,6 +148,14 @@ export default {
       },
       paintPolygonTool() {
         cesium.paint.paintPolygonTool()
+      },
+      paintWave() {
+        cesium.paint.addWave(102.230282, 29.910397, 2000, {
+          r: 255,
+          g: 0,
+          b: 0,
+          a: 0.6
+        }, 2e3, 3, 0);
       },
       clear() {
         cesium.paint.clear()
@@ -409,7 +434,81 @@ export default {
 
     onMounted(() => {
       cesium = new B_Cesium('cesiumContainer')
-      measure.measureMovingPointTool()
+      measure.measureMovingPointTool();
+
+      function specialEffects() {
+        Cesium.CircleWaveMaterialProperty = CircleWaveMaterialProperty
+        Cesium.Material.CircleWaveMaterialType = 'CircleWaveMaterial'
+        Cesium.Material.CircleWaveSource = `czm_material czm_getMaterial(czm_materialInput materialInput)\n
+    {\n
+        czm_material material = czm_getDefaultMaterial(materialInput);\n
+        material.diffuse = 1.5 * color.rgb;\n
+        vec2 st = materialInput.st;\n
+        vec3 str = materialInput.str;\n
+        float dis = distance(st, vec2(0.5, 0.5));\n
+        float per = fract(time);\n
+        if (abs(str.z) > 0.001) {\n
+            discard;\n
+        }\n
+        if (dis > 0.5) { \n
+            discard; \n
+        } else { \n
+            float perDis = 0.5 / count;\n
+            float disNum; \n
+            float bl = .0; \n
+            for (int i = 0; i <= 999; i++) { \n
+                if (float(i) <= count) { \n
+                  disNum = perDis *
+    float(i) - dis + per / count; \n
+                    if (disNum > 0.0) { \n
+                        if (disNum < perDis) { \n
+                            bl = 1.0 - disNum / perDis;\n
+                        }\n
+                      else if
+    (disNum - perDis < perDis) { \n
+                                bl = 1.0 - abs(1.0 - disNum / perDis); \n
+                        } \n
+                        material.alpha = pow(bl, gradient); \n
+                    } \n
+                } \n
+            } \n
+        } \n
+    return material; \n
+    } \n`
+
+        function CircleWaveMaterialProperty(color, duration, count, gradient) {
+          this._definitionChanged = new Cesium.Event()
+          this._color = undefined
+          this._colorSubscription = undefined
+          this.color = color
+          this.duration = Cesium.defaultValue(duration, 1e3)
+          this.count = Cesium.defaultValue(count, 2)
+          if (this.count <= 0) this.count = 1
+          this.gradient = Cesium.defaultValue(gradient, 0.1)
+          if (this.gradient < 0) this.gradient = 0
+          else if (this.gradient > 1) this.gradient = 1
+          this._time = performance.now()
+        }
+
+        Object.defineProperties(CircleWaveMaterialProperty.prototype, {
+          isConstant: {
+            get: function () {
+              return false
+            }
+          },
+          definitionChanged: {
+            get: function () {
+              return this._definitionChanged
+            }
+          },
+          color: Cesium.createPropertyDescriptor('color')
+        })
+
+        CircleWaveMaterialProperty.prototype.getType = function (time) {
+          return Cesium.Material.CircleWaveMaterialType
+        }
+
+      }
     })
 
     return {
